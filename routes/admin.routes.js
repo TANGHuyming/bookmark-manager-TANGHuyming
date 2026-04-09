@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const slugify = require('../utils/slugify');
+const {randomUUID} = require('node:crypto');
+const {slugify} = require('../utils/slugify');
 const logger = require('../middleware/logger');
 const validateSlug = require('../middleware/validateSlug');
 const autoRender = require('../middleware/autoRender');
@@ -60,6 +61,74 @@ router.get('/bookmarks/new', function (req, res, next) {
 
 router.post('/bookmarks/new', function (req, res, next) {
   const body = req.body;
+  // console.log('New bookmark: ', body)
+
+  // check if title is empty
+  if(!body.title || body.title.length === 0) {
+    return res.status(403).res.send({
+      message: 'Title must not be empty'
+    })
+  }
+
+  // validate url protocol
+  if(!body.url.startsWith('http') || !body.url.startsWith('https')) {
+    return res.status(403).res.send({
+      message: 'Url is invalid'
+    })
+  }
+  
+  // check if url is unique
+  const matchedUrls = bookmarks.filter(b => b.url === body.url)
+  if(matchedUrls.length !== 0) {
+    return res.status(403).res.send({
+      message: 'Url must be not be duplicated'
+    })
+  }
+
+  // check if slug is unique
+  const slugifiedTitle = slugify(body.title);
+  const matchedSlug = bookmarks.filter(b => b.slug === slugifiedTitle);
+  if(matchedSlug.length !== 0) {
+    return res.status(403).res.send({
+      message: 'Slugs must be unique'
+    })
+  }
+
+  const tags = body.tags.trim().split(' ');
+  
+  const newBookmark = {
+    id: randomUUID(),
+    title: body.title,
+    url: body.url,
+    description: body.description,
+    tags: tags,
+    isArchived: false,
+    createdAt: (new Date()).toISOString(),
+    updatedAt: (new Date()).toISOString()
+  };
+  
+  bookmarks.push(newBookmark);
+  res.redirect('/')
+})
+
+router.get('/bookmarks/:slug/edit', function (req, res, next) {
+  const slug = req.params.slug;
+  const filteredBookmarks = bookmarks.filter(b => b.slug === slug);
+  const tags = filteredBookmarks[0].tags.join(' ')
+
+  const context = {
+    slug,
+    filteredBookmark: filteredBookmarks[0],
+    tags,
+  }
+
+  res.render('admin/editBookmark', context);
+})
+
+router.post('/bookmarks/:slug/edit', function (req, res, next) {
+  const slug = req.params.slug;
+  const body = req.body;
+
   // check if title is empty
   if(!body.title || body.title.length === 0) {
     return res.status(403).res.send({
@@ -90,26 +159,8 @@ router.post('/bookmarks/new', function (req, res, next) {
       message: 'Slugs must be unique'
     })
   }
-  
-  res.redirect('/')
-})
 
-router.get('/bookmarks/:slug/edit', function (req, res, next) {
-  const slug = req.params.slug;
-  const filteredBookmarks = bookmarks.filter(b => b.slug === slug);
-  const tags = filteredBookmarks[0].tags.join(' ')
-
-  const context = {
-    slug,
-    filteredBookmark: filteredBookmarks[0],
-    tags,
-  }
-
-  res.render('admin/editBookmark', context);
-})
-
-router.post('/bookmarks/:slug/edit', function (req, res, next) {
-
+  res.redirect('/');
 })
 
 router.post('/bookmarks/:slug/delete', function (req, res, next) {
