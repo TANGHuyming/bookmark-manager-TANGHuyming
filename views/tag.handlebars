@@ -1,31 +1,30 @@
-{{!--
-  FILE: views/tag.handlebars
-  PURPOSE: Archive page listing all posts with a given tag.
+<main class="max-w-5xl mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-bold tracking-tight text-white mb-1">Bookmark with Tag: {{tagSlug}}</h1>
+        <p class="text-gray-500 text-sm">Overview of all your bookmarks with tag: {{tagSlug}}</p>
+    </div>
 
-  SEO NOTE:
-    /tag/express is a flat taxonomy URL — easy to share, bookmark, and link.
-    Tags provide a second orthogonal navigation axis (alongside categories).
---}}
-<h1>Tag: <span class="tag tag--large">{{tagSlug}}</span></h1>
-
-<p class="post-count">{{posts.length}} posts tagged "{{tagSlug}}"</p>
-
-<div class="post-list">
-  {{#each posts}}
-    <article class="post-card">
-      <h2 class="post-card__title">
-        <a href="/posts/{{this.slug}}">{{this.title}}</a>
-      </h2>
-      <p class="post-card__meta">
-        <time datetime="{{this.date}}">{{formatDate this.date}}</time>
-        &mdash;
-        <a href="/category/{{this.categorySlug}}">{{this.category}}</a>
-      </p>
-      <p class="post-card__excerpt">{{this.excerpt}}</p>
-    </article>
-  {{else}}
-    <p>No posts found for this tag.</p>
-  {{/each}}
-</div>
-
-<a href="/posts" class="btn btn--outline">&larr; All Posts</a>
+    {{#each filteredBookmarks}}
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 flex items-center justify-between hover:border-gray-600 transition">
+        <div class="flex items-center gap-4 min-w-0">
+            <div class="w-2 h-2 rounded-full flex-shrink-0 {{#if this.isArchived}}bg-gray-600{{else}}bg-green-400{{/if}}">
+            </div>
+            <div class="min-w-0">
+                <div class="text-sm text-white font-medium truncate">{{this.title}}</div>
+                <div class="text-xs text-gray-500 truncate">{{this.url}}</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0 ml-4">
+            <a href="{{this.url}}" target="_blank"
+                class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+                Visit
+            </a>
+            <a href="/bookmarks/{{this.slug}}"
+                class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+                View Details
+            </a>
+        </div>
+    </div>
+    {{/each}}
+</main>

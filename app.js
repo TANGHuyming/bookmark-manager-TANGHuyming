@@ -47,19 +47,9 @@ publicApp.set('views', path.join(__dirname, 'views'));
 publicApp.use(staticFiles);
 publicApp.use(express.urlencoded({ extended: false }));
 publicApp.use((req, res, next) => {
-    const pathName = req.path;
-
-    res.locals.navHome = pathName === '/';
-    res.locals.navPosts =
-        pathName === '/posts' ||
-        pathName.startsWith('/posts/') ||
-        pathName.startsWith('/category/') ||
-        pathName.startsWith('/tag/');
-    res.locals.navAbout = pathName === '/about';
-    res.locals.navContact = pathName === '/contact';
-
+    res.locals.isPublic = false;
     next();
-});
+})
 publicApp.use('/', publicRoutes);
 
 // ─── adminApp ────────────────────────────────────────────────────────────────
@@ -78,6 +68,10 @@ adminApp.set('views', path.join(__dirname, 'views'));
 adminApp.use(staticFiles);
 adminApp.use(express.urlencoded({ extended: false }));
 adminApp.use(cookieParser());
+adminApp.use((req, res, next) => {
+    res.locals.isPublic = false;
+    next();
+})
 adminApp.use('/', adminRoutes);
 
 const app = express();

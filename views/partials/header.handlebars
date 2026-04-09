@@ -7,6 +7,13 @@
       🔖 Bookmarks
     </a>
 
+    {{!-- Search bar --}}
+    <form action="/search" method="GET">
+      <input type="text" id="q" name="q" placeholder="Search bookmark..." value=""
+        class="border bg-gray-900 border-gray-800 rounded-lg p-4">
+      <button type="submit" class="cursor-pointer">🔍</button>
+    </form>
+
     <!-- Nav -->
     <nav class="flex items-center gap-6">
       <a href="/"
@@ -17,6 +24,8 @@
         class="text-sm text-gray-400 hover:text-white transition {{#if isBookmarks}}text-white border-b border-blue-400{{/if}}">
         All Bookmarks
       </a>
+
+      {{#if isPublic}}
       <a href="/bookmarks/new"
         class="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg transition font-medium">
         + New
@@ -26,7 +35,7 @@
           Logout
         </button>
       </form>
+      {{/if}}
     </nav>
-
   </div>
 </header>

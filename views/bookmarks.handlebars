@@ -8,7 +8,7 @@
     {{#each bookmarks}}
     <div class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 flex items-center justify-between hover:border-gray-600 transition">
         <div class="flex items-center gap-4 min-w-0">
-            <div class="w-2 h-2 rounded-full flex-shrink-0 {{#if this.archived}}bg-gray-600{{else}}bg-green-400{{/if}}">
+            <div class="w-2 h-2 rounded-full flex-shrink-0 {{#if this.isArchived}}bg-gray-600{{else}}bg-green-400{{/if}}">
             </div>
             <div class="min-w-0">
                 <div class="text-sm text-white font-medium truncate">{{this.title}}</div>
