@@ -1,0 +1,39 @@
+{{!--
+  FILE: views/posts/list.handlebars
+  PURPOSE: List all blog posts.
+
+  TEACHING NOTE:
+    This view is inside a subdirectory (views/posts/).
+    res.render('posts/list', ...) resolves to this file.
+    autoRender does NOT serve subdirectory views – only explicit routes do.
+--}}
+<h1>All Posts</h1>
+
+<p class="post-count">{{posts.length}} posts total</p>
+
+<div class="post-list">
+  {{#each posts}}
+    <article class="post-card">
+      <h2 class="post-card__title">
+        <a href="/posts/{{this.slug}}">{{this.title}}</a>
+      </h2>
+      <p class="post-card__meta">
+        <time datetime="{{this.date}}">{{formatDate this.date}}</time>
+        &mdash;
+        <a href="/category/{{this.categorySlug}}">{{this.category}}</a>
+      </p>
+      <p class="post-card__excerpt">{{this.excerpt}}</p>
+
+      {{!-- Tag links render a /tag/:tagSlug URL for each tag --}}
+      <p class="post-card__tags">
+        {{#each this.tags}}
+          <a href="/tag/{{this}}" class="tag">{{this}}</a>
+        {{/each}}
+      </p>
+
+      <a href="/posts/{{this.slug}}" class="btn">Read more &rarr;</a>
+    </article>
+  {{else}}
+    <p>No posts found.</p>
+  {{/each}}
+</div>

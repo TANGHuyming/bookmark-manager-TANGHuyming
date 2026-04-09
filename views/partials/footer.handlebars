@@ -1,0 +1,22 @@
+{{!--
+  FILE: views/partials/footer.handlebars
+  PURPOSE: Reusable site footer.
+
+  TEACHING NOTE:
+    {{currentYear}} calls the Handlebars helper registered in app.js.
+    Helpers are global across all templates – no need to pass the year
+    through every res.render() context object.
+--}}
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>
+      &copy; {{currentYear}} My Blog &mdash;
+      Built with <a href="https://expressjs.com">Express.js</a>
+      &amp; <a href="https://handlebarsjs.com">Handlebars</a>
+    </p>
+    <nav class="site-footer__nav">
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
+</footer>

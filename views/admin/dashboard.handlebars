@@ -1,0 +1,52 @@
+{{!--
+  FILE: views/admin/dashboard.handlebars
+  PURPOSE: Admin landing page with summary stats.
+
+  Context: stats.totalPosts, stats.totalCategories, stats.totalTags, recentPosts[]
+  Layout: automatically uses views/layouts/admin.handlebars (adminApp defaultLayout)
+--}}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__value">{{stats.totalPosts}}</div>
+    <div class="stat-card__label">Posts</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__value">{{stats.totalCategories}}</div>
+    <div class="stat-card__label">Categories</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__value">{{stats.totalTags}}</div>
+    <div class="stat-card__label">Tags</div>
+  </div>
+</div>
+
+<section class="admin-section">
+  <div class="admin-section-header">
+    <h2>Recent Posts</h2>
+    <a href="/posts/new" class="btn btn--small">+ New Post</a>
+  </div>
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each recentPosts}}
+        <tr>
+          <td><strong>{{this.title}}</strong></td>
+          <td>{{this.category}}</td>
+          <td>{{formatDate this.date}}</td>
+          <td>
+            <a href="/posts/{{this.slug}}/edit" class="btn btn--small">Edit</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr><td colspan="4">No posts yet.</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+</section>

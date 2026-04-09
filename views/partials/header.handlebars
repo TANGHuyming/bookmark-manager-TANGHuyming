@@ -1,0 +1,20 @@
+{{!--
+  FILE: views/partials/header.handlebars
+  PURPOSE: Reusable site header with navigation.
+
+  TEACHING NOTE:
+    Partials are included with {{> partialName}}.
+    They share the same data context as the parent template, so any variable
+    available in the layout/page template is also available here.
+--}}
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__brand">My Blog</a>
+    <nav class="site-header__nav">
+      <a href="/" class="nav-link {{#if navHome}}nav-link--active{{/if}}">Home</a>
+      <a href="/posts" class="nav-link {{#if navPosts}}nav-link--active{{/if}}">Posts</a>
+      <a href="/about" class="nav-link {{#if navAbout}}nav-link--active{{/if}}">About</a>
+      <a href="/contact" class="nav-link {{#if navContact}}nav-link--active{{/if}}">Contact</a>
+    </nav>
+  </div>
+</header>
