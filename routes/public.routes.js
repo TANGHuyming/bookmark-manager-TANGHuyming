@@ -43,26 +43,32 @@ router.get('/bookmarks', function (req, res, next) {
   res.render('bookmarks', context);
 });
 
-router.get('/bookmarks/:slug', function (req, res, next) {
-  const slug = req.params.slug;
-  const filteredBookmark = bookmarks.filter(b => b.slug == slug);
-  const context = filteredBookmark[0];
-  res.render('bookmarkDetails', context);
-});
+router.get('/bookmarks/:slug', 
+  validateSlug('slug'),
+  function (req, res, next) {
+    const slug = req.params.slug;
+    const filteredBookmark = bookmarks.filter(b => b.slug == slug);
+    const context = filteredBookmark[0];
+    res.render('bookmarkDetails', context);
+  }
+);
 
-router.get('/tag/:tagSlug', function (req, res, next) {
-  const tagSlug = req.params.tagSlug;
-  const filteredBookmarks = bookmarks.filter(b => b.tags.includes(tagSlug));
+router.get('/tag/:tagSlug',
+  validateSlug('slug'),
+  function (req, res, next) {
+    const tagSlug = req.params.tagSlug;
+    const filteredBookmarks = bookmarks.filter(b => b.tags.includes(tagSlug));
 
-  // console.log("Filtered by tags: ", filteredBookmarks);
+    // console.log("Filtered by tags: ", filteredBookmarks);
 
-  const context = {
-    tag: tagSlug,
-    filteredBookmarks
-  };
+    const context = {
+      tag: tagSlug,
+      filteredBookmarks
+    };
 
-  res.render('tag', context);
-});
+    res.render('tag', context);
+  }
+);
 
 router.get('/search', function (req, res, next) {
   const { q } = req.query;
