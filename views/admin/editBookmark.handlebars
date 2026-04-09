@@ -1,32 +1,32 @@
 <main class="max-w-5xl mx-auto px-6 py-12">
     <!-- Header -->
     <div class="mb-10">
-        <h1 class="text-4xl font-bold tracking-tight text-white mb-1">Add a New Bookmark</h1>
+        <h1 class="text-4xl font-bold tracking-tight text-white mb-1">Edit Bookmark : {{slug}}</h1>
     </div>
 
     <form action="/bookmarks/{{slug}}/edit" method="POST"
         class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-16 gap-y-5 grid grid-cols-[20%_1fr]"
     >
         <label for="title">Title: </label>
-        <input type="text" id="title" name="title" required placeholder="Enter title..."
+        <input type="text" id="title" name="title" required placeholder="Enter title..." value="{{filteredBookmark.title}}"
             class="border-gray-500 border p-2"
         >
 
         <label for="url">Url: </label>
-        <input type="text" id="url" name="url" required placeholder="Enter url..."
+        <input type="text" id="url" name="url" required placeholder="Enter url..." value="{{filteredBookmark.url}}"
             class="border-gray-500 border p-2"
         >
 
         <label for="description">Description: </label>
-        <textarea type="text" id="description" name="description" placeholder="Enter description..." rows="6"
+        <textarea type="text" id="description" name="description" placeholder="Enter description..." rows="6" value="{{filteredBookmark.description}}"
             class="border-gray-500 border p-2"
         ></textarea>
 
         <label for="tags">Tags: </label>
-        <input type="text" id="tags" name="tags" required placeholder="Enter tags (separated by whitespace)..."
+        <input type="text" id="tags" name="tags" required placeholder="Enter tags (separated by whitespace)..." value="{{tags}}"
             class="border-gray-500 border p-2"
         >
 
-        <button type="submit" class="col-span-2 border border-gray-700 bg-gray-800 hover:bg-gray-700 hover:border-gray-600 ease-in-out transition duration-300 cursor-pointer rounded-lg p-2">Add new bookmark</button>
+        <button type="submit" class="col-span-2 border border-gray-700 bg-gray-800 hover:bg-gray-700 hover:border-gray-600 ease-in-out transition duration-300 cursor-pointer rounded-lg p-2">Edit bookmark</button>
     </form>
 </main>

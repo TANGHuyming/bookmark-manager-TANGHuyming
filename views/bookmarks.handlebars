@@ -24,6 +24,16 @@
                 class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
                 View Details
             </a>
+            {{#unless isPublic}}
+            <a href="/bookmarks/{{this.slug}}/edit"
+                class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+                Edit
+            </a>
+            <a href="/bookmarks/{{this.slug}}/delete"
+                class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+                Delete
+            </a>
+            {{/unless}}
         </div>
     </div>
     {{/each}}

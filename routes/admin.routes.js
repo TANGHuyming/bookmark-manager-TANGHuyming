@@ -95,7 +95,17 @@ router.post('/bookmarks/new', function (req, res, next) {
 })
 
 router.get('/bookmarks/:slug/edit', function (req, res, next) {
-  
+  const slug = req.params.slug;
+  const filteredBookmarks = bookmarks.filter(b => b.slug === slug);
+  const tags = filteredBookmarks[0].tags.join(' ')
+
+  const context = {
+    slug,
+    filteredBookmark: filteredBookmarks[0],
+    tags,
+  }
+
+  res.render('admin/editBookmark', context);
 })
 
 router.post('/bookmarks/:slug/edit', function (req, res, next) {
