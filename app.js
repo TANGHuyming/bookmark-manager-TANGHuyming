@@ -47,7 +47,7 @@ publicApp.set('views', path.join(__dirname, 'views'));
 publicApp.use(staticFiles);
 publicApp.use(express.urlencoded({ extended: false }));
 publicApp.use((req, res, next) => {
-    res.locals.isPublic = false;
+    res.locals.isPublic = true;
     next();
 })
 publicApp.use('/', publicRoutes);
@@ -76,7 +76,7 @@ adminApp.use('/', adminRoutes);
 
 const app = express();
 
-app.use(vhost('superAdmin.' + config.DOMAIN, adminApp));   // admin subdomain first
+app.use(vhost('admin.' + config.DOMAIN, adminApp));   // admin subdomain first
 app.use(publicApp);                                   // fallback → public app
 
 app.use((err, req, res, next) => {

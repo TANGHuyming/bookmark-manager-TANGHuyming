@@ -1,56 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{pageTitle}} | Admin</title>
+
+  <title>Admin Bookmark Manager</title>
+
+  <meta name="description" content="A simple bookmark manager for learning routing in ExpressJS">
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
 
-  <div>
+<body class="bg-gray-950 text-gray-100 min-h-screen font-mono">
+  {{> header}}
 
-    {{!-- Sidebar navigation --}}
-    <aside>
-      <div>
-        <span>⚙</span>
-        <span>Admin Panel</span>
-      </div>
-      <nav>
-        <a href="/">Dashboard</a>
-        <a href="/posts">All Posts</a>
-        <a href="/posts/new">New Post</a>
-        <hr>
-        <a href="http://localhost:3000" target="_blank">
-          ↗ View Public Site
-        </a>
-      </nav>
-    </aside>
+  {{{body}}}
 
-    {{!-- Main content area --}}
-    <div>
-      <header>
-        <h1>{{pageTitle}}</h1>
-        <div>
-          <small>
-            Signed in as {{#if adminUser.name}}{{adminUser.name}}{{else}}{{adminUser.username}}{{/if}}
-          </small>
-          <form method="POST" action="/logout">
-            <button type="submit" class="btn btn--outline btn--small">Logout</button>
-          </form>
-        </div>
-      </header>
-
-      {{#if error}}
-        <div>{{error}}</div>
-      {{/if}}
-
-      <main>
-        {{{body}}}
-      </main>
-    </div>
-
-  </div>
-
+  {{> footer}}
 </body>
-</html>
