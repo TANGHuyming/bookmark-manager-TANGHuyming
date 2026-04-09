@@ -1,63 +1,51 @@
-{{!--
-  FILE: views/layouts/admin.handlebars
-  PURPOSE: Separate layout for the admin area.
-
-  TEACHING NOTE:
-    This layout is visually distinct from the public layout on purpose.
-    Admins should immediately know they are in a privileged area.
-
-    Having two layouts demonstrates that different Express sub-apps can share
-    the same views directory but use completely different wrapping HTML.
-    No single line of CSS or JS from the public site bleeds into admin.
---}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{pageTitle}} | Admin</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="admin-body">
+<body>
 
-  <div class="admin-layout">
+  <div>
 
     {{!-- Sidebar navigation --}}
-    <aside class="admin-sidebar">
-      <div class="admin-brand">
-        <span class="admin-brand-icon">⚙</span>
+    <aside>
+      <div>
+        <span>⚙</span>
         <span>Admin Panel</span>
       </div>
-      <nav class="admin-nav">
-        <a href="/" class="admin-nav-link">Dashboard</a>
-        <a href="/posts" class="admin-nav-link">All Posts</a>
-        <a href="/posts/new" class="admin-nav-link">New Post</a>
+      <nav>
+        <a href="/">Dashboard</a>
+        <a href="/posts">All Posts</a>
+        <a href="/posts/new">New Post</a>
         <hr>
-        <a href="http://localhost:3000" class="admin-nav-link admin-nav-link--muted" target="_blank">
+        <a href="http://localhost:3000" target="_blank">
           ↗ View Public Site
         </a>
       </nav>
     </aside>
 
     {{!-- Main content area --}}
-    <div class="admin-content">
-      <header class="admin-header">
-        <h1 class="admin-title">{{pageTitle}}</h1>
-        <div class="admin-header-actions">
-          <small class="admin-auth-note">
+    <div>
+      <header>
+        <h1>{{pageTitle}}</h1>
+        <div>
+          <small>
             Signed in as {{#if adminUser.name}}{{adminUser.name}}{{else}}{{adminUser.username}}{{/if}}
           </small>
-          <form method="POST" action="/logout" class="admin-logout-form">
+          <form method="POST" action="/logout">
             <button type="submit" class="btn btn--outline btn--small">Logout</button>
           </form>
         </div>
       </header>
 
       {{#if error}}
-        <div class="admin-alert admin-alert--error">{{error}}</div>
+        <div>{{error}}</div>
       {{/if}}
 
-      <main class="admin-main">
+      <main>
         {{{body}}}
       </main>
     </div>

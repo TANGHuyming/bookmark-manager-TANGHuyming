@@ -1,35 +1,26 @@
-{{!--
-  FILE: views/layouts/public.handlebars
-  PURPOSE: Shared wrapper for all public-facing pages.
-
-  TEACHING NOTE:
-    {{{body}}} (triple braces) is where the child template is injected.
-    Triple braces output unescaped HTML – needed here because body itself
-    is a rendered HTML fragment. Never use triple braces for user input.
-
-    Partials ({{> header}}) are reusable fragments loaded from views/partials/.
---}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   {{!-- SEO NOTE: Descriptive, page-specific titles help search ranking --}}
-  <title>{{pageTitle}} | My Blog</title>
+  <title>{{pageTitle}} | Ming's Bookmark Manager</title>
 
-  <meta name="description" content="A personal blog about Node.js, Express, and web development.">
-  <link rel="stylesheet" href="/css/style.css">
+  <meta name="description" content="A simple bookmark manager for learning routing in ExpressJS">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
 
+<body class="bg-gray-950 text-gray-100 min-h-screen font-mono">
   {{> header}}
 
-  <main class="container">
+  <main>
     {{{body}}}
   </main>
 
   {{> footer}}
 
 </body>
+
 </html>

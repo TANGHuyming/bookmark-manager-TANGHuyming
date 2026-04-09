@@ -1,5 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+const logger           = require('../middleware/logger');
+const validateSlug     = require('../middleware/validateSlug');
+const autoRender       = require('../middleware/autoRender');
+
+router.use(logger);
 
 router.get('/login', function(req, res, next) {
   res.render('login');

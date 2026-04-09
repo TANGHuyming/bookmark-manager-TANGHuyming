@@ -80,18 +80,11 @@ adminApp.use(express.urlencoded({ extended: false }));
 adminApp.use(cookieParser());
 adminApp.use('/', adminRoutes);
 
-// ─── Main app – vhost dispatcher ─────────────────────────────────────────────
-// TEACHING: The main app acts as a router-by-hostname only. It doesn't define
-// any routes itself – that belongs to each sub-app.
 const app = express();
 
 app.use(vhost('superAdmin.' + config.DOMAIN, adminApp));   // admin subdomain first
 app.use(publicApp);                                   // fallback → public app
 
-// ─── Global error handler ─────────────────────────────────────────────────────
-// TEACHING: A four-parameter function (err, req, res, next) is Express's
-// special signature for error-handling middleware. It must be registered last.
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     console.error('[ERROR]', err.message);
     res.status(500).send('<h1>500 – Internal Server Error</h1><p>' + err.message + '</p>');
