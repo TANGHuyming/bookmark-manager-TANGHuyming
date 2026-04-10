@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 const logger = require('../middleware/logger');
 const validateSlug = require('../middleware/validateSlug');
@@ -47,5 +48,12 @@ router.get('/tag/:tagSlug',
 router.get('/search', 
   searchBookmarks
 );
+
+router.use(autoRender(path.join(__dirname, '../views')));
+
+router.use((req, res, next) => {
+    const context = {} // empty context = no message
+    res.status(404).render('404', context);
+});
 
 module.exports = router;

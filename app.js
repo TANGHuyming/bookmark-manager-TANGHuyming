@@ -73,11 +73,6 @@ const app = express();
 app.use(vhost('admin.' + config.DOMAIN, adminApp));   // admin subdomain first
 app.use(publicApp);                                   // fallback → public app
 
-app.use((req, res, next) => {
-    const context = {} // empty context = no message
-    res.status(404).render('404', context);
-});
-
 app.use((err, req, res, next) => {
     console.error('[ERROR]', err.message);
     res.status(500).send('<h1>500 – Internal Server Error</h1><p>' + err.message + '</p>');

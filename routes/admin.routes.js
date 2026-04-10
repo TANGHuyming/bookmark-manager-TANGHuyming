@@ -83,4 +83,9 @@ router.post('/bookmarks/:slug/unarchive',
   unarchiveBookmark
 )
 
+router.use((req, res, next) => {
+    const context = {} // empty context = no message
+    res.status(404).render('404', context);
+});
+
 module.exports = router;
