@@ -25,10 +25,12 @@ export const bookmarks = [
 
 export const adminUsers = [
 	{
+		name: 'admin',
 		username: 'admin',
 		password: 'admin123',
 	},
 	{
+		name: 'editor',
 		username: 'editor',
 		password: 'editor123',
 	}

@@ -8,21 +8,57 @@ const autoRender = require('../middleware/autoRender');
 const adminAuth = require('../middleware/adminAuth');
 
 const {bookmarks} = require('../data/mock');
+const {adminUsers} = require('../data/mock');
 
 router.use(logger);
 router.use((req, res, next) => {
     res.locals.isPublic = false;
     next();
 });
-// router.use(adminAuth);
 
 router.get('/login', function (req, res, next) {
-  res.render('admin/login');
+  const context = {
+    demoUsers: adminUsers
+  }
+  res.render('admin/login', context);
 });
 
 router.post('/login', function (req, res, next) {
-  res.send('login successful');
+  const body = req.body;
+  const username = body.username;
+  const password = body.password;
+
+  console.log(username, password);
+
+  if(!username || !password || username.length === 0 || password.length === 0) {
+    res.locals.isError = true;
+    res.locals.error = "Invalid credentials";
+    res.status(401);
+    res.redirect('/login')
+  }
+
+  // validate user
+  const user = adminUsers.find(a => a.username === username);
+  if(!user) {
+    res.locals.isError = true;
+    res.locals.error = "User not found";
+    res.status(401);
+    res.redirect('/login');
+  }
+
+  if(user.password !== password) {
+    res.locals.isError = true;
+    res.locals.error = "Invalid credentials";
+    res.status(401);
+    res.redirect('/login');
+  }
+
+  res.cookie('admin_user', username)
+
+  res.redirect('/');
 });
+
+router.use(adminAuth);
 
 router.post('/logout', function (req, res, next) {
   res.send('logout successful');
