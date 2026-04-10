@@ -17,9 +17,21 @@ router.use((req, res, next) => {
 });
 
 router.get('/login', function (req, res, next) {
+  // read error
+  const isError = req.cookies.isError;
+  const error = req.cookies.error;
+
+  res.clearCookie('isError');
+  res.clearCookie('error');
+
   const context = {
-    demoUsers: adminUsers
+    demoUsers: adminUsers,
+    isError,
+    error,
   }
+
+  // console.log(context);
+
   res.render('admin/login', context);
 });
 
@@ -28,29 +40,27 @@ router.post('/login', function (req, res, next) {
   const username = body.username;
   const password = body.password;
 
-  console.log(username, password);
+  // console.log(username, password);
 
   if(!username || !password || username.length === 0 || password.length === 0) {
-    res.locals.isError = true;
-    res.locals.error = "Invalid credentials";
-    res.status(401);
-    res.redirect('/login')
+    res.cookie('isError', 'true');
+    res.cookie('error', "Invalid credentials");
+    return res.status(401).redirect('/login');
   }
 
   // validate user
   const user = adminUsers.find(a => a.username === username);
+
   if(!user) {
-    res.locals.isError = true;
-    res.locals.error = "User not found";
-    res.status(401);
-    res.redirect('/login');
+    res.cookie('isError', 'true');
+    res.cookie('error', "User not found");
+    return res.status(401).redirect('/login');
   }
 
   if(user.password !== password) {
-    res.locals.isError = true;
-    res.locals.error = "Invalid credentials";
-    res.status(401);
-    res.redirect('/login');
+    res.cookie('isError', 'true');
+    res.cookie('error', "Invalid credentials");
+    return res.status(401).redirect('/login');
   }
 
   res.cookie('admin_user', username)
@@ -61,7 +71,8 @@ router.post('/login', function (req, res, next) {
 router.use(adminAuth);
 
 router.post('/logout', function (req, res, next) {
-  res.send('logout successful');
+  res.clearCookie('admin_user');
+  res.redirect('/login');
 });
 
 /* GET users listing. */

@@ -25,10 +25,11 @@
         class="text-sm text-gray-400 hover:text-white transition {{#if isBookmarks}}text-white border-b border-blue-400{{/if}}">
         Login
       </a>
-      <a href="/logout"
-        class="text-sm text-gray-400 hover:text-white transition {{#if isBookmarks}}text-white border-b border-blue-400{{/if}}">
-        Logout
-      </a>
+      <form action="/logout" method="POST">
+        <button type="submit" class="cursor-pointer text-sm text-gray-400 hover:text-white transition {{#if isBookmarks}}text-white border-b border-blue-400{{/if}}">
+          Logout
+        </button>
+      </form>
     </nav>
   </div>
 </header>
