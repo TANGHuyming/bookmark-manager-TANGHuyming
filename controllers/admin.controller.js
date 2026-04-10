@@ -97,7 +97,6 @@ const postNewBookmark = (req, res) => {
         return res.status(403).send({ message: 'Title must not be empty' });
     }
 
-    // ❗ FIXED LOGIC (was always failing before)
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
         return res.status(403).send({ message: 'Url is invalid' });
     }

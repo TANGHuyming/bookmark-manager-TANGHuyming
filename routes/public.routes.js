@@ -10,7 +10,8 @@ const {
   getBookmarks,
   getBookmarkBySlug,
   getBookmarksByTag,
-  searchBookmarks
+  searchBookmarks,
+  searchByTag
 } = require('../controllers/public.controller');
 
 router.use(logger);
@@ -34,8 +35,12 @@ router.get('/bookmarks/:slug',
   getBookmarkBySlug
 );
 
+router.post('/tag', 
+  searchByTag
+)
+
 router.get('/tag/:tagSlug',
-  validateSlug('slug'),
+  validateSlug('tagSlug'),
   getBookmarksByTag
 );
 

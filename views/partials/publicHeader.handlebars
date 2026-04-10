@@ -9,7 +9,13 @@
 
     {{!-- Search bar --}}
     <form action="/search" method="GET">
-      <input type="text" id="q" name="q" placeholder="Search bookmark..." value=""
+      <input type="text" id="q" name="q" placeholder="Search by title..."
+        class="border bg-gray-900 border-gray-800 rounded-lg p-4">
+      <button type="submit" class="cursor-pointer">🔍</button>
+    </form>
+
+    <form action="/tag" method="POST">
+      <input type="text" id="tag" name="tag" placeholder="Search by tag..."
         class="border bg-gray-900 border-gray-800 rounded-lg p-4">
       <button type="submit" class="cursor-pointer">🔍</button>
     </form>

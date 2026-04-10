@@ -45,9 +45,16 @@ const getBookmarksByTag = (req, res) => {
     );
 
     res.render('tag', {
-        tag: tagSlug,
+        tagSlug: tagSlug,
         filteredBookmarks
     });
+};
+
+// GET /search?q=
+const searchByTag = (req, res) => {
+    const body = req.body;
+
+    res.redirect(`/tag/${body.tag}`)
 };
 
 // GET /search?q=
@@ -69,5 +76,6 @@ module.exports = {
     getBookmarks,
     getBookmarkBySlug,
     getBookmarksByTag,
+    searchByTag,
     searchBookmarks
 };
