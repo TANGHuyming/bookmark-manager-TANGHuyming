@@ -5,12 +5,19 @@ const {slugify} = require('../utils/slugify');
 const logger = require('../middleware/logger');
 const validateSlug = require('../middleware/validateSlug');
 const autoRender = require('../middleware/autoRender');
-const bookmarks = require('../data/mock');
+const adminAuth = require('../middleware/adminAuth');
+
+const {bookmarks} = require('../data/mock');
 
 router.use(logger);
+router.use((req, res, next) => {
+    res.locals.isPublic = false;
+    next();
+});
+// router.use(adminAuth);
 
 router.get('/login', function (req, res, next) {
-  res.render('login');
+  res.render('admin/login');
 });
 
 router.post('/login', function (req, res, next) {
@@ -44,7 +51,7 @@ router.get('/', function (req, res, next) {
     recentBookmarks
   };
 
-  res.render('home', context);
+  res.render('admin/dashboard', context);
 });
 
 router.get('/bookmarks', function (req, res, next) {
@@ -65,14 +72,14 @@ router.post('/bookmarks/new', function (req, res, next) {
 
   // check if title is empty
   if(!body.title || body.title.length === 0) {
-    return res.status(403).res.send({
+    return res.status(403).send({
       message: 'Title must not be empty'
     })
   }
 
   // validate url protocol
   if(!body.url.startsWith('http') || !body.url.startsWith('https')) {
-    return res.status(403).res.send({
+    return res.status(403).send({
       message: 'Url is invalid'
     })
   }
@@ -81,6 +88,76 @@ router.post('/bookmarks/new', function (req, res, next) {
   const matchedUrls = bookmarks.filter(b => b.url === body.url)
   if(matchedUrls.length !== 0) {
     return res.status(403).res.send({
+      message: 'Url must be not be duplicated'
+    })
+  }
+
+  // check if slug is unique
+  const slugifiedTitle = slugify(body.title);
+  const matchedSlug = bookmarks.filter(b => b.slug === slugifiedTitle);
+  if(matchedSlug.length !== 0) {
+    return res.status(403).send({
+      message: 'Slugs must be unique'
+    })
+  }
+
+  const tags = body.tags.trim().split(' ');
+  
+  const newBookmark = {
+    id: randomUUID(),
+    title: body.title,
+    url: body.url,
+    description: body.description,
+    tags: tags,
+    isArchived: false,
+    createdAt: (new Date()).toISOString(),
+    updatedAt: (new Date()).toISOString()
+  };
+  
+  bookmarks.push(newBookmark);
+  res.redirect('/')
+})
+
+router.get('/bookmarks/:slug/edit', validateSlug('slug'), function (req, res, next) {
+  const slug = req.params.slug;
+  const filteredBookmarks = bookmarks.filter(b => b.slug === slug);
+  const tags = filteredBookmarks[0].tags.join(' ')
+
+  const context = {
+    slug,
+    filteredBookmark: filteredBookmarks[0],
+    tags,
+  }
+
+  res.render('admin/editBookmark', context);
+})
+
+router.post('/bookmarks/:slug/edit', validateSlug('slug'), function (req, res, next) {
+  const slug = req.params.slug;
+  const body = req.body;
+
+  // remove old bookmark
+  const indexOfOldBookmark = bookmarks.indexOf(bookmarks.find(b => b.slug === slug));
+  bookmarks.splice(indexOfOldBookmark, 1);
+
+  // check if title is empty
+  if(!body.title || body.title.length === 0) {
+    return res.status(403).send({
+      message: 'Title must not be empty'
+    })
+  }
+
+  // validate url protocol
+  if(!body.url.startsWith('http') || !body.url.startsWith('https')) {
+    return res.status(403).send({
+      message: 'Url is invalid'
+    })
+  }
+  
+  // check if url is unique
+  const matchedUrls = bookmarks.filter(b => b.url === body.url)
+  if(matchedUrls.length !== 0) {
+    return res.status(403).send({
       message: 'Url must be not be duplicated'
     })
   }
@@ -106,73 +183,39 @@ router.post('/bookmarks/new', function (req, res, next) {
     createdAt: (new Date()).toISOString(),
     updatedAt: (new Date()).toISOString()
   };
-  
+
   bookmarks.push(newBookmark);
-  res.redirect('/')
-})
-
-router.get('/bookmarks/:slug/edit', function (req, res, next) {
-  const slug = req.params.slug;
-  const filteredBookmarks = bookmarks.filter(b => b.slug === slug);
-  const tags = filteredBookmarks[0].tags.join(' ')
-
-  const context = {
-    slug,
-    filteredBookmark: filteredBookmarks[0],
-    tags,
-  }
-
-  res.render('admin/editBookmark', context);
-})
-
-router.post('/bookmarks/:slug/edit', function (req, res, next) {
-  const slug = req.params.slug;
-  const body = req.body;
-
-  // check if title is empty
-  if(!body.title || body.title.length === 0) {
-    return res.status(403).res.send({
-      message: 'Title must not be empty'
-    })
-  }
-
-  // validate url protocol
-  if(!body.url.startswith('http') || !body.url.startswith('https')) {
-    return res.status(403).res.send({
-      message: 'Url is invalid'
-    })
-  }
-  
-  // check if url is unique
-  const matchedUrls = bookmarks.filter(b => b.url === body.url)
-  if(matchedUrls.length !== 0) {
-    return res.status(403).res.send({
-      message: 'Url must be not be duplicated'
-    })
-  }
-
-  // check if slug is unique
-  const slugifiedTitle = slugify(body.title);
-  const matchedSlug = bookmarks.filter(b => b.slug === slugifiedTitle);
-  if(matchedSlug.length !== 0) {
-    return res.status(403).res.send({
-      message: 'Slugs must be unique'
-    })
-  }
-
   res.redirect('/');
 })
 
-router.post('/bookmarks/:slug/delete', function (req, res, next) {
+router.post('/bookmarks/:slug/delete', validateSlug('slug'), function (req, res, next) {
+  const slug = req.params.slug;
 
+  // remove old bookmark
+  const indexOfOldBookmark = bookmarks.indexOf(bookmarks.find(b => b.slug === slug));
+  bookmarks.splice(indexOfOldBookmark, 1);
+
+  res.redirect('/bookmarks');
 })
 
-router.post('/bookmarks/:slug/archive', function (req, res, next) {
+router.post('/bookmarks/:slug/archive', validateSlug('slug'), function (req, res, next) {
+  const slug = req.params.slug;
 
+  // archive bookmark
+  const indexOfOldBookmark = bookmarks.indexOf(bookmarks.find(b => b.slug === slug));
+  bookmarks[indexOfOldBookmark].isArchived = true;
+
+  res.redirect('/bookmarks');
 })
 
-router.post('/bookmarks/:slug/unarchive', function (req, res, next) {
+router.post('/bookmarks/:slug/unarchive', validateSlug('slug'), function (req, res, next) {
+  const slug = req.params.slug;
 
+  // unarchive bookmark
+  const indexOfOldBookmark = bookmarks.indexOf(bookmarks.find(b => b.slug === slug));
+  bookmarks[indexOfOldBookmark].isArchived = false;
+
+  res.redirect('/bookmarks');
 })
 
 module.exports = router;

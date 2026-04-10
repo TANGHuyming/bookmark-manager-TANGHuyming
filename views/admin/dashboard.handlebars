@@ -1,52 +1,74 @@
-{{!--
-  FILE: views/admin/dashboard.handlebars
-  PURPOSE: Admin landing page with summary stats.
+<!-- Main -->
+<main class="max-w-5xl mx-auto px-6 py-12">
 
-  Context: stats.totalPosts, stats.totalCategories, stats.totalTags, recentPosts[]
-  Layout: automatically uses views/layouts/admin.handlebars (adminApp defaultLayout)
---}}
-<div class="stat-grid">
-  <div class="stat-card">
-    <div class="stat-card__value">{{stats.totalPosts}}</div>
-    <div class="stat-card__label">Posts</div>
+  <!-- Header -->
+  <div class="mb-10">
+    <h1 class="text-4xl font-bold tracking-tight text-white mb-1">Bookmark Manager</h1>
+    <p class="text-gray-500 text-sm mb-5">A simple application to manage your bookmarks</p>
   </div>
-  <div class="stat-card">
-    <div class="stat-card__value">{{stats.totalCategories}}</div>
-    <div class="stat-card__label">Categories</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-card__value">{{stats.totalTags}}</div>
-    <div class="stat-card__label">Tags</div>
-  </div>
-</div>
 
-<section class="admin-section">
-  <div class="admin-section-header">
-    <h2>Recent Posts</h2>
-    <a href="/posts/new" class="btn btn--small">+ New Post</a>
+  <!-- Stats -->
+  <div class="grid grid-cols-3 gap-4 mb-12">
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div class="text-3xl font-bold text-blue-400 mb-1">{{totalBookmarks}}</div>
+      <div class="text-xs text-gray-500 uppercase tracking-widest">Total</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div class="text-3xl font-bold text-green-400 mb-1">{{totalActiveBookmarks}}</div>
+      <div class="text-xs text-gray-500 uppercase tracking-widest">Active</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div class="text-3xl font-bold text-gray-500 mb-1">{{totalArchivedBookmarks}}</div>
+      <div class="text-xs text-gray-500 uppercase tracking-widest">Archived</div>
+    </div>
   </div>
-  <table class="admin-table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Category</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each recentPosts}}
-        <tr>
-          <td><strong>{{this.title}}</strong></td>
-          <td>{{this.category}}</td>
-          <td>{{formatDate this.date}}</td>
-          <td>
-            <a href="/posts/{{this.slug}}/edit" class="btn btn--small">Edit</a>
-          </td>
-        </tr>
-      {{else}}
-        <tr><td colspan="4">No posts yet.</td></tr>
+
+  <!-- Recent bookmarks -->
+  <div>
+    <h2 class="text-xs text-gray-500 uppercase tracking-widest mb-4">Recent Bookmarks</h2>
+
+    {{#if recentBookmarks.length}}
+    <div class="flex flex-col gap-2">
+      {{#each recentBookmarks}}
+      <div
+        class="bg-gray-900 border border-gray-800 rounded-lg px-5 py-4 flex items-center justify-between hover:border-gray-600 transition">
+        <div class="flex items-center gap-4 min-w-0">
+          <div class="w-2 h-2 rounded-full shrink-0 {{#if this.archived}}bg-gray-600{{else}}bg-green-400{{/if}}">
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm text-white font-medium truncate">{{this.title}}</div>
+            <div class="text-xs text-gray-500 truncate">{{this.url}}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 ml-4">
+          <a href="{{this.url}}" target="_blank"
+            class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+            Visit
+          </a>
+          <a href="/bookmarks/{{this.slug}}/edit"
+            class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+            Edit
+          </a>
+        </div>
+      </div>
       {{/each}}
-    </tbody>
-  </table>
-</section>
+    </div>
+
+    <a href="/bookmarks" class="inline-block mt-4 text-sm text-blue-400 hover:text-blue-300 transition">
+      View all bookmarks →
+    </a>
+
+    {{else}}
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-16 text-center">
+      <div class="text-4xl mb-4">🔖</div>
+      <div class="text-white font-medium mb-1">No bookmarks yet</div>
+      <div class="text-gray-500 text-sm mb-6">Save your first link to get started</div>
+      <a href="/bookmarks/new"
+        class="bg-blue-600 hover:bg-blue-500 text-white text-sm px-5 py-2.5 rounded-lg transition font-medium">
+        + Add Bookmark
+      </a>
+    </div>
+    {{/if}}
+  </div>
+
+</main>

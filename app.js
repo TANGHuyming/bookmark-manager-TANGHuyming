@@ -10,6 +10,8 @@ const config = require('./config/app.config');
 const publicRoutes = require('./routes/public.routes');
 const adminRoutes = require('./routes/admin.routes');
 
+require('dotenv').config();
+
 const hbsHelpers = {
     currentYear: () => new Date().getFullYear(),
     formatDate: (dateStr) =>
@@ -46,10 +48,6 @@ publicApp.set('views', path.join(__dirname, 'views'));
 
 publicApp.use(staticFiles);
 publicApp.use(express.urlencoded({ extended: false }));
-publicApp.use((req, res, next) => {
-    res.locals.isPublic = true;
-    next();
-})
 publicApp.use('/', publicRoutes);
 
 // ─── adminApp ────────────────────────────────────────────────────────────────
@@ -67,11 +65,7 @@ adminApp.set('views', path.join(__dirname, 'views'));
 
 adminApp.use(staticFiles);
 adminApp.use(express.urlencoded({ extended: false }));
-adminApp.use(cookieParser());
-adminApp.use((req, res, next) => {
-    res.locals.isPublic = false;
-    next();
-})
+adminApp.use(cookieParser(process.env.ADMIN_TOKEN));
 adminApp.use('/', adminRoutes);
 
 const app = express();

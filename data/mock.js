@@ -1,4 +1,4 @@
-const bookmarks = [
+export const bookmarks = [
 	{
 		id: 1,
 		title: 'Express Routing Guide',
@@ -23,4 +23,13 @@ const bookmarks = [
 	},
 ];
 
-module.exports = bookmarks;
+export const adminUsers = [
+	{
+		username: 'admin',
+		password: 'admin123',
+	},
+	{
+		username: 'editor',
+		password: 'editor123',
+	}
+]

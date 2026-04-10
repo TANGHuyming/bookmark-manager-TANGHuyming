@@ -5,9 +5,13 @@ const logger = require('../middleware/logger');
 const validateSlug = require('../middleware/validateSlug');
 const autoRender = require('../middleware/autoRender');
 
-const bookmarks = require('../data/mock');
+const {bookmarks} = require('../data/mock');
 
 router.use(logger);
+router.use((req, res, next) => {
+    res.locals.isPublic = true;
+    next();
+})
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
