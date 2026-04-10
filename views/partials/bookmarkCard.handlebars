@@ -13,11 +13,12 @@
             class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
             Visit
         </a>
-        <a href="/bookmarks/{{this.slug}}"
-            class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
-            View Details
-        </a>
-        {{#unless @root.isPublic}}
+        {{#if @root.isPublic}}
+            <a href="/bookmarks/{{this.slug}}"
+                class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
+                View Details
+            </a>
+        {{else}}
             <a href="/bookmarks/{{this.slug}}/edit"
                 class="text-xs text-gray-400 hover:text-white transition px-3 py-1.5 rounded border border-gray-700 hover:border-gray-500">
                 Edit
@@ -40,6 +41,6 @@
                     </button>
                 </form>
             {{/if}}
-        {{/unless}}
+        {{/if}}
     </div>
 </div>

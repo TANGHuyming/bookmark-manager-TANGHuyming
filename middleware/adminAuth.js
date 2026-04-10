@@ -18,9 +18,6 @@ function adminAuth(req, res, next) {
     });
   }
 
-  req.adminUser = user;
-  res.locals.adminUser = user;
-
   next();
 }
 

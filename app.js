@@ -65,13 +65,17 @@ adminApp.set('views', path.join(__dirname, 'views'));
 
 adminApp.use(staticFiles);
 adminApp.use(express.urlencoded({ extended: false }));
-adminApp.use(cookieParser(process.env.ADMIN_TOKEN));
+adminApp.use(cookieParser());
 adminApp.use('/', adminRoutes);
 
 const app = express();
 
 app.use(vhost('admin.' + config.DOMAIN, adminApp));   // admin subdomain first
 app.use(publicApp);                                   // fallback → public app
+
+app.use((req, res, next) => {
+    res.status(500).send('<h1>400 – Page not found</h1>');
+});
 
 app.use((err, req, res, next) => {
     console.error('[ERROR]', err.message);
