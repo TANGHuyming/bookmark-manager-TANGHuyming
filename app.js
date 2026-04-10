@@ -74,7 +74,8 @@ app.use(vhost('admin.' + config.DOMAIN, adminApp));   // admin subdomain first
 app.use(publicApp);                                   // fallback → public app
 
 app.use((req, res, next) => {
-    res.status(500).send('<h1>400 – Page not found</h1>');
+    const context = {} // empty context = no message
+    res.status(404).render('404', context);
 });
 
 app.use((err, req, res, next) => {
